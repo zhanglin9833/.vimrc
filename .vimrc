@@ -17,19 +17,21 @@ Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'vim-scripts/a.vim'
 
-Plugin 'vim-scripts/bufexplorer.zip'
+Plugin 'jlanzarotta/bufexplorer'
 
 Plugin 'scrooloose/nerdcommenter'
 
-Plugin 'vim-scripts/The-NERD-tree'
+Plugin 'scrooloose/nerdtree'
 
 Plugin 'vim-scripts/taglist.vim'
 
-Plugin 'vim-scripts/cscope.vim'
+Plugin 'brookhong/cscope.vim'
 
 Plugin 'flazz/vim-colorschemes'
 
 Plugin 'davidhalter/jedi-vim'
+
+Plugin 'Valloric/YouCompleteMe'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -184,6 +186,8 @@ if has("cscope")
     set csverb
 endif
 
+noremap <silent> <leader>csa :cs add cscope.out<CR>
+
 noremap <silent> <leader>css :cs find s <C-R>=expand("<cword>")<CR><CR>
 noremap <silent> <leader>csg :cs find g <C-R>=expand("<cword>")<CR><CR>
 noremap <silent> <leader>csc :cs find c <C-R>=expand("<cword>")<CR><CR>
@@ -193,7 +197,7 @@ noremap <silent> <leader>csd :cs find d <C-R>=expand("<cword>")<CR><CR>
 noremap <silent> <leader>csf :cs find f <C-R>=expand("<cfile>")<CR><CR>
 noremap <silent> <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR>
 
-noremap <C-F11> :!find . -name "*.h" -o -name "*.c" -o -name "*.cpp"  > cscope.files && cscope -bq<cr>
+noremap <C-F11> :!find . -name "*.h" -o -name "*.c" -o -name "*.cpp" -o -name "*.py" > cscope.files && cscope -bq<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -243,13 +247,25 @@ noremap <silent> <F8> :BufExplorer<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""
-"          omnicppcomplete
+"          YouCompleteMe
 """""""""""""""""""""""""""""""""""""""""""
+"YouCompleteMe needs to be compiled before work.
+"cd ~/.vim/bundle/YouCompleteMe
+"./install.sh --clang-completer
+"the way to install clang: 
+"http://blog.csdn.net/firebird321/article/details/48528569
 
-"不打开预览窗口来提示变量定义
-set completeopt=menu
+"let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_complete_in_comments = 1
+let g:ycm_auto_trigger = 0
+let g:ycm_cache_omnifunc = 0
+let g:ycm_confirm_extra_conf = 0
 
-"在弹出的下拉菜单中使用Ctrl+p和Ctrl+o进行上下选择
+"turn off YCM"
+noremap <silent> <leader>y :let g:ycm_auto_trigger = 0<CR> 
+"turn on YCM"
+noremap <silent> <leader>Y :let g:ycm_auto_trigger = 1<CR> 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -269,22 +285,6 @@ let NERDShutUp=1
 
 ",cm：多行注释，类似C++的/**/，,cu是取消注释
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"""""""""""""""""""""""""""""""""""""""
-"           DoxygenToolkit
-"""""""""""""""""""""""""""""""""""""""
-let g:DoxygenToolkit_briefTag_pre="@Synopsis "
-let g:DoxygenToolkit_paramTag_pre="@Param\t"
-let g:DoxygenToolkit_returnTag="@Returns\t"
-let g:DoxygenToolkit_blockHeader="-------------------------------------"
-let g:DoxygenToolkit_blockFooter="--------------------------------------"
-let g:DoxygenToolkit_authorName="Zhang Lin"
-let g:DoxygenToolkit_licenseTag="My own license"
-
-"生成标准的函数注释
-noremap fg :Dox<cr>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""
 "        a.vim
