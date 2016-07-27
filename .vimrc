@@ -186,16 +186,17 @@ if has("cscope")
     set csverb
 endif
 
-noremap <silent> <leader>csa :cs add cscope.out<CR>
+noremap <silent> <leader>fa :cs add cscope.out<CR>
+noremap <silent> <leader>fk :cs kill -1<CR>
 
-noremap <silent> <leader>css :cs find s <C-R>=expand("<cword>")<CR><CR>
-noremap <silent> <leader>csg :cs find g <C-R>=expand("<cword>")<CR><CR>
-noremap <silent> <leader>csc :cs find c <C-R>=expand("<cword>")<CR><CR>
-noremap <silent> <leader>cst :cs find t <C-R>=expand("<cword>")<CR><CR>
-noremap <silent> <leader>cse :cs find e <C-R>=expand("<cword>")<CR><CR>
-noremap <silent> <leader>csd :cs find d <C-R>=expand("<cword>")<CR><CR>
-noremap <silent> <leader>csf :cs find f <C-R>=expand("<cfile>")<CR><CR>
-noremap <silent> <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR>
+noremap <silent> <leader>fs :cs find s <C-R>=expand("<cword>")<CR><CR>
+noremap <silent> <leader>fg :cs find g <C-R>=expand("<cword>")<CR><CR>
+noremap <silent> <leader>fc :cs find c <C-R>=expand("<cword>")<CR><CR>
+noremap <silent> <leader>ft :cs find t <C-R>=expand("<cword>")<CR><CR>
+noremap <silent> <leader>fe :cs find e <C-R>=expand("<cword>")<CR><CR>
+noremap <silent> <leader>fd :cs find d <C-R>=expand("<cword>")<CR><CR>
+noremap <silent> <leader>ff :cs find f <C-R>=expand("<cfile>")<CR><CR>
+noremap <silent> <leader>fi :cs find i <C-R>=expand("<cfile>")<CR><CR>
 
 noremap <C-F11> :!find . -name "*.h" -o -name "*.c" -o -name "*.cpp" -o -name "*.py" > cscope.files && cscope -bq<cr>
 
