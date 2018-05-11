@@ -33,6 +33,10 @@ Plugin 'davidhalter/jedi-vim'
 
 Plugin 'Valloric/YouCompleteMe'
 
+Plugin 'editorconfig/editorconfig-vim'
+
+Plugin 'mileszs/ack.vim'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -61,7 +65,7 @@ set autoindent " always set autoindenting on
 set tabstop=4 "让一个tab等于4个空格
 set softtabstop=4 "输入tab时实际占有的空格数
 set shiftwidth=4 "reindent操作（<<和>>）时缩进的空格数
-set expandtab "输入tab时自动将其转化为空格
+"set expandtab "输入tab时自动将其转化为空格
 
 set nowrap "不自动换行
 set hlsearch "高亮显示结果
@@ -149,7 +153,8 @@ noremap <silent> <leader>ne :tabnew
 """""""""""""""""""""""""""""""""
 "按Ctrl+<F12>生成当前目录的tags文件
 "生成tags文件后，移动光标到某个元素，CTRL+]进行跳转，CTRL+o回退
-noremap <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
+"noremap <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
+noremap <silent> <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -188,6 +193,7 @@ endif
 
 noremap <silent> <leader>fa :cs add cscope.out<CR>
 noremap <silent> <leader>fk :cs kill -1<CR>
+noremap <silent> <leader>fu :cs kill -1<CR>:cs add cscope.out<CR>
 
 noremap <silent> <leader>fs :cs find s <C-R>=expand("<cword>")<CR><CR>
 noremap <silent> <leader>fg :cs find g <C-R>=expand("<cword>")<CR><CR>
@@ -198,7 +204,8 @@ noremap <silent> <leader>fd :cs find d <C-R>=expand("<cword>")<CR><CR>
 noremap <silent> <leader>ff :cs find f <C-R>=expand("<cfile>")<CR><CR>
 noremap <silent> <leader>fi :cs find i <C-R>=expand("<cfile>")<CR><CR>
 
-noremap <C-F11> :!find . -name "*.h" -o -name "*.c" -o -name "*.cpp" -o -name "*.py" > cscope.files && cscope -bq<cr>
+"noremap <C-F11> :!find . -name "*.h" -o -name "*.c" -o -name "*.cpp" -o -name "*.py" > cscope.files && cscope -bq<cr>
+noremap <silent> <F11> :!find . -name "*.h" -o -name "*.c" -o -name "*.cpp" -o -name "*.py" > cscope.files && cscope -bq<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -256,10 +263,12 @@ noremap <silent> <F8> :BufExplorer<CR>
 "the way to install clang: 
 "http://blog.csdn.net/firebird321/article/details/48528569
 
-"let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
+let g:ycm_server_python_interpreter='/usr/bin/python'
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
+"let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_complete_in_comments = 1
-let g:ycm_auto_trigger = 0
+let g:ycm_auto_trigger = 1
 let g:ycm_cache_omnifunc = 0
 let g:ycm_confirm_extra_conf = 0
 
@@ -275,7 +284,8 @@ noremap <silent> <leader>Y :let g:ycm_auto_trigger = 1<CR>
 """""""""""""""""""""""""""""""""""""""
 let NERDTreeWinPos='right'
 
-noremap <C-F10> :NERDTreeToggle<CR>
+"noremap <C-F10> :NERDTreeToggle<CR>
+noremap <silent> <F10> :NERDTreeToggle<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -285,6 +295,16 @@ noremap <C-F10> :NERDTreeToggle<CR>
 let NERDShutUp=1
 
 ",cm：多行注释，类似C++的/**/，,cu是取消注释
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""
+"           ack.vim -> the silver searcher ag
+"""""""""""""""""""""""""""""""""""""""
+"let g:ackprg = 'ag -S --nocolor --nogroup --column --ignore sitedata --ignore image --ignore "tags"'
+
+let g:ackprg = 'ag --vimgrep --ignore sitedata --ignore image --ignore "tags" --ignore "*.out" --ignore "cscope*"'
+
+noremap <silent> <leader>ag :Ack <C-R>=expand("<cword>")<CR><CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""
@@ -302,5 +322,3 @@ let NERDShutUp=1
 "或对多行用n==（n是自然数）表示自动缩进从当前行起的下面n行。你可以试试把代码
 "缩进任意打乱再用n==排版，相当于一般IDE里的code format。使用gg=G可对整篇代码进行排版。 
 "
-
-
