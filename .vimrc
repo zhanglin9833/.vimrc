@@ -6,6 +6,7 @@ set nocompatible              " be iMproved, required
 syntax on
 filetype off                  " required
 
+"git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#begin()
@@ -36,6 +37,10 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'editorconfig/editorconfig-vim'
 
 Plugin 'mileszs/ack.vim'
+
+Plugin 'fatih/vim-go'
+
+Plugin 'KabbAmine/zeavim.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -306,6 +311,23 @@ let g:ackprg = 'ag --vimgrep --ignore sitedata --ignore image --ignore "tags" --
 
 noremap <silent> <leader>ag :Ack <C-R>=expand("<cword>")<CR><CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""
+"           zeavim.vim
+"""""""""""""""""""""""""""""""""""""""
+nmap gzz <Plug>Zeavim
+vmap gzz <Plug>ZVVisSelection
+nmap <leader>z <Plug>ZVKeyDocset
+nmap gZ <Plug>ZVKeyDocset<CR>
+nmap gz <Plug>ZVOperator
+"let g:zv_keep_focus = 0
+"let g:zv_zeal_args = '--style=gtk+'
+"let g:zv_file_types = {
+"            \   'help'                : 'vim',
+"            \   'javascript'          : 'javascript,nodejs',
+"            \   'python'              : 'python_3',
+"            \   '\v^(G|g)ulpfile\.js' : 'gulp,javascript,nodejs',
+"            \ }
 
 """""""""""""""""""""""""""""""""""""""""""
 "        a.vim
