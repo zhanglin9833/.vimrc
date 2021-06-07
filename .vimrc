@@ -24,7 +24,8 @@ Plugin 'scrooloose/nerdcommenter'
 
 Plugin 'scrooloose/nerdtree'
 
-Plugin 'vim-scripts/taglist.vim'
+" too old and replaced by tagbar
+" Plugin 'vim-scripts/taglist.vim'
 
 Plugin 'brookhong/cscope.vim'
 
@@ -42,6 +43,8 @@ Plugin 'fatih/vim-go'
 
 Plugin 'KabbAmine/zeavim.vim'
 
+Plugin 'majutsushi/tagbar'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -58,6 +61,20 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
+"
+" vim-go 
+" :GoInstallBinaries to install tools needed by vim-go which will be in
+" $GOPATH/bin
+"
+" YouCompleteMe
+" 1.error -> YouCompleteme unavailable : no module named future
+" cd ~/.vim/bundle/YouCompleteMe && git submodule update --init --recursive
+" then -> build it: cd ~/.vim/bundle/YouCompleteMe && ./install.sh
+"
+" 2.build ycm_core
+" conda deactivate
+" CXX=/usr/local/bin/g++-11 /usr/local/bin/python3.9 install.py --all
+" 上述 --all 用以支持所有语言的语义, --clang-completer 单指c语义
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -70,7 +87,7 @@ set autoindent " always set autoindenting on
 set tabstop=4 "让一个tab等于4个空格
 set softtabstop=4 "输入tab时实际占有的空格数
 set shiftwidth=4 "reindent操作（<<和>>）时缩进的空格数
-"set expandtab "输入tab时自动将其转化为空格
+set expandtab "输入tab时自动将其转化为空格
 
 set nowrap "不自动换行
 set hlsearch "高亮显示结果
@@ -156,17 +173,22 @@ noremap <silent> <leader>ne :tabnew
 """""""""""""""""""""""""""""""""
 "      Ctags
 """""""""""""""""""""""""""""""""
-"按Ctrl+<F12>生成当前目录的tags文件
+"按Ctrl+<F7>生成当前目录的tags文件
 "生成tags文件后，移动光标到某个元素，CTRL+]进行跳转，CTRL+o回退
-"noremap <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
-noremap <silent> <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
+
+"-R表示递归创建，也就包括源代码根目录（当前目录）下的所有子目录;
+"--c++-kinds=+ps是为c/c+语言添加函数原型信息;
+"--fields=+iaS是为标签添加继承信息（inheritance），访问控制信息（access）和函数特征（Signature）如参数表或原型等;
+"--extra=+q是为类成员添加标签;
+"noremap <C-F7> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
+noremap <silent> <F7> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""
 "      Tag list 
 """""""""""""""""""""""""""""""""
-let Tlist_Ctags_Cmd = '/usr/bin/ctags'
+let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
 "不同时显示多个文件的tag，只显示当前文件的
 let Tlist_Show_One_File = 1
 "如果taglist窗口是最后一个窗口，则退出vim
@@ -176,7 +198,26 @@ let Tlist_Exit_OnlyWindow = 1
 let Tlist_WinWidth = 50
 
 "按<F9>打开/关闭Taglist窗口
-noremap <silent> <F9> :TlistToggle<cr>
+"noremap <silent> <F9> :TlistToggle<cr>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""
+"      Tagbar 
+"""""""""""""""""""""""""""""""""
+"开启自动预览(随着光标在标签上的移动，顶部会出现一个实时的预览窗口)
+let g:tagbar_autopreview = 0
+
+"关闭排序,即按标签本身在文件中的位置排序
+let g:tagbar_sort = 0
+
+let g:tagbar_position = 'topleft vertical'
+
+"设置宽度
+let g:tagbar_width = 35
+
+"按<F9>打开/关闭 Tagbar 窗口
+nmap <F9> :TagbarToggle<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -184,14 +225,16 @@ noremap <silent> <F9> :TlistToggle<cr>
 "     Cscope setting 
 """""""""""""""""""""""""""""""""
 if has("cscope")
-    set csprg=/usr/bin/cscope
+    "set csprg=/usr/bin/cscope
+    set csprg=/usr/local/bin/cscope
     set csto=1
     set cst
     set cscopequickfix=s-,c-,d-,i-,t-,e-
     set nocsverb
     "add any database in current directory
     if filereadable("cscope.out")
-        cs add cscope.out
+        " cs add cscope.out
+        cscope add cscope.out
     endif
     set csverb
 endif
@@ -209,8 +252,8 @@ noremap <silent> <leader>fd :cs find d <C-R>=expand("<cword>")<CR><CR>
 noremap <silent> <leader>ff :cs find f <C-R>=expand("<cfile>")<CR><CR>
 noremap <silent> <leader>fi :cs find i <C-R>=expand("<cfile>")<CR><CR>
 
-"noremap <C-F11> :!find . -name "*.h" -o -name "*.c" -o -name "*.cpp" -o -name "*.py" > cscope.files && cscope -bq<cr>
-noremap <silent> <F11> :!find . -name "*.h" -o -name "*.c" -o -name "*.cpp" -o -name "*.py" > cscope.files && cscope -bq<cr>
+"noremap <C-F6> :!find . -name "*.h" -o -name "*.c" -o -name "*.cpp" -o -name "*.py" > cscope.files && cscope -bq<cr>
+noremap <silent> <F6> :!find . -name "*.h" -o -name "*.c" -o -name "*.cpp" -o -name "*.py" -o -name "*.go" > cscope.files && cscope -bq<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -264,11 +307,12 @@ noremap <silent> <F8> :BufExplorer<CR>
 """""""""""""""""""""""""""""""""""""""""""
 "YouCompleteMe needs to be compiled before work.
 "cd ~/.vim/bundle/YouCompleteMe
-"./install.sh --clang-completer
+"./install.sh --clang-completer or
+"./install.sh --all
 "the way to install clang: 
 "http://blog.csdn.net/firebird321/article/details/48528569
 
-let g:ycm_server_python_interpreter='/usr/bin/python'
+let g:ycm_server_python_interpreter='/usr/local/bin/python3.9'
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
 "let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_seed_identifiers_with_syntax = 1
@@ -330,6 +374,15 @@ nmap gz <Plug>ZVOperator
 "            \ }
 
 """""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""
+"           vim-go
+"""""""""""""""""""""""""""""""""""""""
+noremap <silent> <leader>cf :GoCallers<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""
+
 "        a.vim
 ".cpp和.h文件快速切换
 "（1）:A，直接打开.cpp和.h对应的文件
